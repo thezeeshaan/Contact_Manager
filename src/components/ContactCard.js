@@ -34,14 +34,14 @@ function ContactCard({ name, phone, email, city, image }) {
             {name}
           </div>
           <div style={{ color: isDark ? "#b7bbc8" : "#8b8b8b", fontSize: 15, fontWeight: 400 }}>
-            {phone}
+            {phone && (phone.startsWith('+') ? phone : `+${phone}`)}
           </div>
-          <div style={{ color: isDark ? "#b7bbc8" : "#8b8b8b", fontSize: 15, fontWeight: 400 }}>
+          {/* <div style={{ color: isDark ? "#b7bbc8" : "#8b8b8b", fontSize: 15, fontWeight: 400 }}>
             {email}
           </div>
           <div style={{ color: isDark ? "#b7bbc8" : "#8b8b8b", fontSize: 15, fontWeight: 400 }}>
             {city}
-          </div>
+          </div> */}
         </div>
         <div style={{ marginRight: 24 }}>
           <Button

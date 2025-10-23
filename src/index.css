@@ -13,6 +13,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus, .react-tel-input .flag-dropdown.open .selected-flag {
+  background-color: transparent !important;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

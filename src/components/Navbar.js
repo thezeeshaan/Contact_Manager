@@ -11,7 +11,7 @@ function Navbar() {
         background: isDark ? '#23272f' : '#fcfcfa',
         color: isDark ? '#f8f8ff' : 'inherit',
       }}>
-        <Container>
+        <Container style={{ padding: "0 150px" }}>
           <Menu.Item style={{ paddingLeft: 0 }}>
             <Icon name="users" size="big" circular inverted style={{ background: 'linear-gradient(135deg,#7ed6df,#48dbfb)', color: 'white', marginRight: 18 }} />
             <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
