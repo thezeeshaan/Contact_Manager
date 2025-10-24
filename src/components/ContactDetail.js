@@ -19,7 +19,7 @@ function ContactDetail({ contact }) {
         <CardDescription>
           <span>
             <Icon name="phone" />
-            {contact.phone}
+            {`+${contact.phone}`}
           </span>
         </CardDescription>
       </CardContent>
@@ -30,10 +30,10 @@ function ContactDetail({ contact }) {
             {contact.email}
           </div>
         )}
-        {contact.city && (
+        {contact.location && (
           <div>
             <Icon name="map marker alternate" />
-            {contact.city}
+            {contact.location}
           </div>
         )}
       </CardContent>

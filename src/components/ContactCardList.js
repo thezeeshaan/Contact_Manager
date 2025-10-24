@@ -1,21 +1,26 @@
-import React from 'react';
-import Contact from '../models/Contact';
-import ContactCard from './ContactCard';
-import { Grid } from 'semantic-ui-react';
+import React from "react";
+import Contact from "../models/Contact";
+import ContactCard from "./ContactCard";
+import { Grid, Segment, Header, Icon, Button } from "semantic-ui-react";
 
 function ContactCardList({ contacts, onEdit, onDelete, onShowDetail }) {
+  if (!contacts || contacts.length === 0)
+    return (
+      <Segment placeholder>
+        <Header icon>
+          <Icon name="dont" />
+          No contacts to display
+        </Header>
+      </Segment>
+    );
   return (
     <Grid columns={2} doubling stackable>
-      {contacts.map((card, idx) => (
-        <Grid.Column key={idx}>
+      {contacts.map((card) => (
+        <Grid.Column key={card.id}>
           <ContactCard
-            image={card.image}
-            name={card.name}
-            phone={card.phone}
-            email={card.email}
-            city={card.city}
-            onEdit={() => onEdit(card, idx)}
-            onDelete={() => onDelete(idx)}
+            contact={card}
+            onEdit={() => onEdit(card, card.id)}
+            onDelete={() => onDelete(card.id)}
             onShowDetail={() => onShowDetail(card)}
           />
         </Grid.Column>

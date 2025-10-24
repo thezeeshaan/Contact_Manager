@@ -3,7 +3,8 @@ import { Card, Image, Button } from "semantic-ui-react";
 import { useTheme} from "../context/ThemeContext";
 import { Icon } from "semantic-ui-react";
 
-function ContactCard({ name, phone, email, city, image, onEdit, onDelete, onShowDetail }) {
+function ContactCard({ contact, onEdit, onDelete, onShowDetail }) {
+  const { name, phone, image } = contact;
   const { isDark } = useTheme();
   return (
     <Card
@@ -41,7 +42,7 @@ function ContactCard({ name, phone, email, city, image, onEdit, onDelete, onShow
             {name}
           </div>
           <div style={{ color: isDark ? "#b7bbc8" : "#8b8b8b", fontSize: 15, fontWeight: 400 }}>
-            {phone && (phone.startsWith('+') ? phone : `+${phone}`)}
+            {phone && `+${phone}`}
           </div>
           {/* <div style={{ color: isDark ? "#b7bbc8" : "#8b8b8b", fontSize: 15, fontWeight: 400 }}>
             {email}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useTheme } from '../context/ThemeContext';
+import React from "react";
+import { useTheme } from "../context/ThemeContext";
 import {
   ModalHeader,
   ModalContent,
@@ -7,26 +7,27 @@ import {
   Button,
   Modal,
   Form,
-} from 'semantic-ui-react';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
+} from "semantic-ui-react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { toast } from "../utils/toast";
 
 function EditContactModal({ open, contact, onClose, onEdit }) {
   const { isDark } = useTheme();
   const [form, setForm] = React.useState({
-    name: contact?.name || '',
-    phone: contact?.phone || '',
-    email: contact?.email || '',
-    city: contact?.city || '',
+    name: contact?.name || "",
+    phone: contact?.phone || "",
+    email: contact?.email || "",
+    location: contact?.location || "",
   });
 
   React.useEffect(() => {
     if (contact) {
       setForm({
-        name: contact.name || '',
-        phone: contact.phone || '',
-        email: contact.email || '',
-        city: contact.city || '',
+        name: contact.name || "",
+        phone: contact.phone || "",
+        email: contact.email || "",
+        location: contact.location || "",
       });
     }
   }, [contact]);
@@ -36,6 +37,18 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
   };
 
   const handleSubmit = () => {
+    if (!form.name || !form.phone) {
+      toast({ message: "Name and Phone are required", negative: true });
+      return;
+    }
+    if (form.phone.length != 12) {
+      toast({
+        message: "Phone number must be exactly 10 digits",
+        negative: true,
+      });
+      return;
+    }
+
     onEdit({ ...contact, ...form });
     if (onClose) onClose();
   };
@@ -46,18 +59,45 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
       open={open}
       onClose={onClose}
       size="tiny"
-      style={{ background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}
+      style={{
+        background: isDark ? "#23272f" : "#fff",
+        color: isDark ? "#f8f8ff" : "#23272f",
+      }}
     >
-      <ModalHeader style={{ fontWeight: 600, textAlign: 'center', background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}>
+      <ModalHeader
+        style={{
+          fontWeight: 600,
+          textAlign: "center",
+          background: isDark ? "#23272f" : "#fff",
+          color: isDark ? "#f8f8ff" : "#23272f",
+        }}
+      >
         Edit Contact
       </ModalHeader>
-      <ModalContent style={{ background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}>
-        <Form onSubmit={handleSubmit} style={{ background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}>
+      <ModalContent
+        style={{
+          background: isDark ? "#23272f" : "#fff",
+          color: isDark ? "#f8f8ff" : "#23272f",
+        }}
+      >
+        <Form
+          onSubmit={handleSubmit}
+          style={{
+            background: isDark ? "#23272f" : "#fff",
+            color: isDark ? "#f8f8ff" : "#23272f",
+          }}
+        >
           <style>{`
-            .themed-label { color: ${isDark ? '#f8f8ff' : '#23272f'} !important; }
+            .themed-label { color: ${
+              isDark ? "#f8f8ff" : "#23272f"
+            } !important; }
           `}</style>
           <Form.Input
-            label={<span className="themed-label">Name <span style={{color: '#db2828'}}>*</span></span>}
+            label={
+              <span className="themed-label">
+                Name <span style={{ color: "#db2828" }}>*</span>
+              </span>
+            }
             name="name"
             required
             value={form.name}
@@ -69,7 +109,7 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
             <PhoneInput
               country={"in"}
               value={form.phone}
-              onChange={phone => setForm(f => ({ ...f, phone }))}
+              onChange={(phone) => setForm((f) => ({ ...f, phone }))}
               preferredCountries={["in", "us"]}
               inputClass="pad"
               autocompleteSearch={true}
@@ -77,6 +117,7 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
               disableSearchIcon={true}
               enableLongNumbers={true}
               countryCodeEditable={true}
+              prefix="+"
               inputStyle={{
                 width: "100%",
                 borderRadius: 6,
@@ -98,14 +139,19 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
           />
           <Form.Input
             label={<span className="themed-label">Location</span>}
-            name="city"
-            value={form.city}
+            name="location"
+            value={form.location}
             onChange={handleChange}
             placeholder="Location"
           />
         </Form>
       </ModalContent>
-      <ModalActions style={{ background: isDark ? '#23272f' : '#fff', borderTop: isDark ? '1px solid #333' : '1px solid #eee' }}>
+      <ModalActions
+        style={{
+          background: isDark ? "#23272f" : "#fff",
+          borderTop: isDark ? "1px solid #333" : "1px solid #eee",
+        }}
+      >
         <Button negative onClick={onClose}>
           Cancel
         </Button>

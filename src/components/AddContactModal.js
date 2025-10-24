@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme } from '../context/ThemeContext';
-import Contact from '../models/Contact';
+import { useTheme } from "../context/ThemeContext";
+import Contact from "../models/Contact";
 import {
   ModalHeader,
   ModalContent,
@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { toast } from "../utils/toast";
 
 function exampleReducer(state, action) {
   switch (action.type) {
@@ -23,55 +24,57 @@ function exampleReducer(state, action) {
   }
 }
 
-
-
-function AddContactForm({ addContact, editContact, updateContact, onClose }) {
+function AddContactModal({ addContact }) {
   const [state, dispatch] = React.useReducer(exampleReducer, {
     open: false,
     dimmer: undefined,
   });
-  const {open} = state;
+  const { open } = state;
 
   const [form, setForm] = React.useState({
     name: "",
-    phone: "",  
+    phone: "",
     email: "",
-    city: "",
+    location: "",
   });
-
-  React.useEffect(() => {
-    if (editContact) {
-      setForm({
-        name: editContact.name || '',
-        phone: editContact.phone || '',
-        email: editContact.email || '',
-        city: editContact.city || '',
-      });
-      dispatch({ type: "OPEN_MODAL" });
-    }
-  }, [editContact]);
 
   const handleChange = (e, { name, value }) => {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
   const handleSubmit = () => {
-    const contact = new Contact(form.name, form.phone, form.email, form.city, "https://i.imgur.com/1bX5QH6.jpg");
-    if (editContact) {
-      updateContact(contact);
-    } else {
-      addContact(contact);
+    // Validate form
+    if (!form.name || !form.phone) {
+      // Alert Toast
+      toast({ message: "Name and Phone are required", negative: true });
+      return;
     }
+    console.log(form.phone);
+    console.log(form.phone.length);
+
+    if (form.phone.length != 12) {
+      toast({ message: "Phone number must be exactly 10 digits", negative: true });
+      return;
+    }
+    
+    const contact = new Contact(
+      form.name,
+      form.phone,
+      form.email,
+      form.location,
+      "https://i.imgur.com/1bX5QH6.jpg"
+    );
+
+    addContact(contact);
+
     dispatch({ type: "CLOSE_MODAL" });
-    if (onClose) onClose();
-    setForm({ name: '', phone: '', email: '', city: '' });
+    setForm({ name: "", phone: "", email: "", location: "" });
   };
 
   // Ensure modal closes and form resets on cancel
   const handleCancel = () => {
     dispatch({ type: "CLOSE_MODAL" });
-    if (onClose) onClose();
-    setForm({ name: '', phone: '', email: '', city: '' });
+    setForm({ name: "", phone: "", email: "", location: "" });
   };
 
   const { isDark } = useTheme();
@@ -86,20 +89,42 @@ function AddContactForm({ addContact, editContact, updateContact, onClose }) {
       <Modal
         dimmer="inverted"
         open={open}
-        onClose={() => dispatch({ type: "CLOSE_MODAL" })}
         size="tiny"
-        style={{ background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}
+        style={{
+          background: isDark ? "#23272f" : "#fff",
+          color: isDark ? "#f8f8ff" : "#23272f",
+        }}
       >
-        <ModalHeader style={{ fontWeight: 600, textAlign: "center", background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}>
+        <ModalHeader
+          style={{
+            fontWeight: 600,
+            textAlign: "center",
+            background: isDark ? "#23272f" : "#fff",
+            color: isDark ? "#f8f8ff" : "#23272f",
+          }}
+        >
           Add a New Contact
         </ModalHeader>
-        <ModalContent style={{ background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}>
-          <Form onSubmit={handleSubmit} style={{ background: isDark ? '#23272f' : '#fff', color: isDark ? '#f8f8ff' : '#23272f' }}>
+        <ModalContent
+          style={{
+            background: isDark ? "#23272f" : "#fff",
+            color: isDark ? "#f8f8ff" : "#23272f",
+          }}
+        >
+          <Form
+            onSubmit={handleSubmit}
+            style={{
+              background: isDark ? "#23272f" : "#fff",
+              color: isDark ? "#f8f8ff" : "#23272f",
+            }}
+          >
             <style>{`
-              .themed-label { color: ${isDark ? '#f8f8ff' : '#23272f'} !important; }
+              .themed-label { color: ${
+                isDark ? "#f8f8ff" : "#23272f"
+              } !important; }
             `}</style>
             <Form.Input
-              label={<span className="themed-label">Name <span style={{color: '#db2828'}}>*</span></span>}
+              label="Name"
               name="name"
               required
               value={form.name}
@@ -140,14 +165,19 @@ function AddContactForm({ addContact, editContact, updateContact, onClose }) {
             />
             <Form.Input
               label={<span className="themed-label">Location</span>}
-              name="Location"
-              value={form.city}
+              name="location"
+              value={form.location}
               onChange={handleChange}
               placeholder="Location"
             />
           </Form>
         </ModalContent>
-        <ModalActions style={{ background: isDark ? '#23272f' : '#fff', borderTop: isDark ? '1px solid #333' : '1px solid #eee' }}>
+        <ModalActions
+          style={{
+            background: isDark ? "#23272f" : "#fff",
+            borderTop: isDark ? "1px solid #333" : "1px solid #eee",
+          }}
+        >
           <Button negative onClick={handleCancel}>
             Cancel
           </Button>
@@ -160,4 +190,4 @@ function AddContactForm({ addContact, editContact, updateContact, onClose }) {
   );
 }
 
-export default AddContactForm;
+export default AddContactModal;
