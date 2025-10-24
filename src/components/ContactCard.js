@@ -1,8 +1,9 @@
 import React from "react";
 import { Card, Image, Button } from "semantic-ui-react";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme} from "../context/ThemeContext";
+import { Icon } from "semantic-ui-react";
 
-function ContactCard({ name, phone, email, city, image }) {
+function ContactCard({ name, phone, email, city, image, onEdit, onDelete, onShowDetail }) {
   const { isDark } = useTheme();
   return (
     <Card
@@ -13,7 +14,13 @@ function ContactCard({ name, phone, email, city, image }) {
         padding: 0,
         marginBottom: 16,
         background: isDark ? "#23272f" : "#fff",
-        color: isDark ? "#f8f8ff" : "#23272f"
+        color: isDark ? "#f8f8ff" : "#23272f",
+        cursor: onShowDetail ? 'pointer' : undefined
+      }}
+      onClick={e => {
+        // Prevent click if edit/delete button is pressed
+        if (e.target.closest('.card-action-btn')) return;
+        if (onShowDetail) onShowDetail();
       }}
     >
       <Card.Content style={{ display: "flex", alignItems: "center", padding: 0, background: "transparent" }}>
@@ -43,18 +50,12 @@ function ContactCard({ name, phone, email, city, image }) {
             {city}
           </div> */}
         </div>
-        <div style={{ marginRight: 24 }}>
-          <Button
-            basic
-            style={{
-              background: isDark ? "#2d3138" : "#f4f4f6",
-              color: isDark ? "#f8f8ff" : "#23272f",
-              borderRadius: 20,
-              fontWeight: 600,
-              minWidth: 64
-            }}
-          >
-            Play
+        <div style={{ marginRight: 24, display: 'flex', gap: 8 }}>
+          <Button icon basic size="small" className="card-action-btn" style={{ borderRadius: 8 }} onClick={e => { e.stopPropagation(); onEdit && onEdit(); }}>
+            <Icon name="edit" />
+          </Button>
+          <Button icon basic color="red" size="small" className="card-action-btn" style={{ borderRadius: 8 }} onClick={e => { e.stopPropagation(); onDelete && onDelete(); }}>
+            <Icon name="trash alternate" />
           </Button>
         </div>
       </Card.Content>
