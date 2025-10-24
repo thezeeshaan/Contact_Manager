@@ -1,16 +1,37 @@
 import Contact from "../models/Contact";
 
 
+export function saveContacts(contacts) {
+  localStorage.setItem('contacts', JSON.stringify(contacts));
+}
+
+export function loadContacts() {
+  const data = localStorage.getItem('contacts');
+  if (!data) return null;
+  try {
+    const arr = JSON.parse(data);
+    return arr.map(c => new Contact(c.name, c.phone, c.email, c.location, c.image, c.id));
+  } catch {
+    return null;
+  }
+}
+
 export function addContact(contacts, contact) {
-  return [contact, ...contacts];
+  const updated = [contact, ...contacts];
+  saveContacts(updated);
+  return updated;
 }
 
 export function editContact(contacts, id, updatedContact) {
-  return contacts.map((c) => (c.id === id ? updatedContact : c));
+  const updated = contacts.map((c) => (c.id === id ? updatedContact : c));
+  saveContacts(updated);
+  return updated;
 }
 
 export function deleteContact(contacts, id) {
-  return contacts.filter((c) => c.id !== id);
+  const updated = contacts.filter((c) => c.id !== id);
+  saveContacts(updated);
+  return updated;
 }
 
 export function filterContacts(contacts, search) {
@@ -26,7 +47,9 @@ export function filterContacts(contacts, search) {
 
 
 export function getDefaultContacts() {
-  return [
+  const loaded = loadContacts();
+  if (loaded && loaded.length) return loaded;
+  const defaults = [
     new Contact(
       "John Doe",
       "611234567890",
@@ -42,4 +65,6 @@ export function getDefaultContacts() {
       "https://i.imgur.com/6vOahbP.jpg"
     ),
   ];
+  saveContacts(defaults);
+  return defaults;
 }

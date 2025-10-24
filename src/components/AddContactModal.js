@@ -13,6 +13,9 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { toast } from "../utils/toast";
 
+
+
+
 function exampleReducer(state, action) {
   switch (action.type) {
     case "OPEN_MODAL":
@@ -77,6 +80,11 @@ function AddContactModal({ addContact }) {
     setForm({ name: "", phone: "", email: "", location: "" });
   };
 
+  const handleClose = () => {
+    dispatch({ type: "CLOSE_MODAL" });
+    setForm({ name: "", phone: "", email: "", location: "" });
+  };
+
   const { isDark } = useTheme();
   return (
     <div>
@@ -86,10 +94,27 @@ function AddContactModal({ addContact }) {
         color="blue"
         onClick={() => dispatch({ type: "OPEN_MODAL" })}
       />
+      <style>{`
+      .react-tel-input .country-list {
+        background: ${isDark ? "#23272f" : "#fff"} !important;
+        color: ${isDark ? "#f8f8ff" : "#23272f"} !important;
+      }
+      .react-tel-input .country-list .country {
+        background: ${isDark ? "#23272f" : "#fff"} !important;
+        color: ${isDark ? "#f8f8ff" : "#23272f"} !important;
+      }
+      .react-tel-input .country-list .country.highlight {
+        background: ${isDark ? "#2d8cff" : "#e6f6ff"} !important;
+        color: ${isDark ? "#fff" : "#23272f"} !important;
+      }
+    `}</style>
       <Modal
         dimmer="inverted"
         open={open}
         size="tiny"
+        closeOnDimmerClick={true}
+        closeOnEscape={true}
+        onClose={handleClose}
         style={{
           background: isDark ? "#23272f" : "#fff",
           color: isDark ? "#f8f8ff" : "#23272f",

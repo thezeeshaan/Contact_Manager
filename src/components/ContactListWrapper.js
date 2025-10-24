@@ -15,7 +15,10 @@ import ContactCardList from "./ContactCardList";
 import DeleteConfirm from "./DeleteConfirm";
 import { toast } from "../utils/toast";
 
+import { useTheme } from '../context/ThemeContext';
+
 function ContactListWrapper() {
+  const { isDark } = useTheme();
   const [detailOpen, setDetailOpen] = React.useState(false);
   const [detailContact, setDetailContact] = React.useState(null);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
@@ -70,13 +73,15 @@ function ContactListWrapper() {
               fluid
               style={{
                 borderRadius: 24,
-                border: "1.5px solid #8ed0f9",
-                boxShadow: "none",
+                border: isDark ? "1.5px solid #2d8cff" : "1.5px solid #8ed0f9",
+                boxShadow: isDark ? "0 2px 8px 0 #23272f" : "none",
                 fontSize: 18,
                 paddingLeft: 16,
                 paddingRight: 16,
-                background: "#fff",
+                background: isDark ? "#23272f" : "#fff",
+                color: isDark ? "#f8f8ff" : "#23272f",
                 minWidth: 250,
+                transition: 'background 0.2s, color 0.2s',
               }}
               input={{
                 style: {
@@ -84,6 +89,7 @@ function ContactListWrapper() {
                   boxShadow: "none",
                   borderRadius: 24,
                   background: "transparent",
+                  color: isDark ? "#f8f8ff" : "#23272f",
                   fontSize: 18,
                 },
               }}

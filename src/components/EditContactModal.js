@@ -54,7 +54,22 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
   };
 
   return (
-    <Modal
+    <>
+      <style>{`
+        .react-tel-input .country-list {
+          background: ${isDark ? "#23272f" : "#fff"} !important;
+          color: ${isDark ? "#f8f8ff" : "#23272f"} !important;
+        }
+        .react-tel-input .country-list .country {
+          background: ${isDark ? "#23272f" : "#fff"} !important;
+          color: ${isDark ? "#f8f8ff" : "#23272f"} !important;
+        }
+        .react-tel-input .country-list .country.highlight {
+          background: ${isDark ? "#2d8cff" : "#e6f6ff"} !important;
+          color: ${isDark ? "#fff" : "#23272f"} !important;
+        }
+      `}</style>
+      <Modal
       dimmer="inverted"
       open={open}
       onClose={onClose}
@@ -160,6 +175,7 @@ function EditContactModal({ open, contact, onClose, onEdit }) {
         </Button>
       </ModalActions>
     </Modal>
+    </>
   );
 }
 
